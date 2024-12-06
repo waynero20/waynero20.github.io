@@ -1,5 +1,10 @@
-import Image from "next/image";
 import localFont from "next/font/local";
+import AnimatedDiv from "@/components/common/animated/animated-div";
+import { Avatar } from "@/components/ui/avatar";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import Markdown from "react-markdown";
+import { CommonCard } from "@/components/common/card";
+import { DATA } from "@/lib/data";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,101 +20,136 @@ const geistMono = localFont({
 export default function Home() {
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
+      className={`${geistSans.variable} ${geistMono.variable}  min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6`}
     >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      <main className="flex flex-col min-h-[100dvh] space-y-10">
+        <section id="hero">
+          <div className="mx-auto w-full max-w-2xl space-y-8">
+            <div className="gap-2 flex justify-between">
+              <div className="flex-col flex flex-1 space-y-1.5">
+                <AnimatedDiv
+                  animationType="SlideInFromLeft"
+                  duration={1}
+                  className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none"
+                >
+                  {`Hello, I'm ${DATA.name.split(" ")[0]}`}
+                </AnimatedDiv>
+                <AnimatedDiv
+                  duration={1}
+                  className="max-w-[600px] md:text-xl"
+                  animationType="SlideInFromLeft"
+                >
+                  {DATA.description}
+                </AnimatedDiv>
+              </div>
+              <AnimatedDiv
+                animationType="ZoomIn"
+                delay={0.5}
+              >
+                <Avatar className="size-28 border">
+                  <AvatarImage alt={DATA.name} src={DATA.avatarUrl} />
+                  <AvatarFallback>{DATA.initials}</AvatarFallback>
+                </Avatar>
+              </AnimatedDiv>
+            </div>
+          </div>
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <section id="about">
+          <AnimatedDiv
+            delay={0.5}
+            animationType="SlideInFromLeft"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <h2 className="text-xl font-bold">About</h2>
+          </AnimatedDiv>
+          <AnimatedDiv
+            delay={0.5}
+            animationType="SlideInFromLeft"
           >
-            Read our docs
-          </a>
-        </div>
+            <Markdown className="prose max-w-full text-pretty font-sans text-sm text-muted-foreground dark:prose-invert">
+              {DATA.summary}
+            </Markdown>
+          </AnimatedDiv>
+        </section>
+
+        <section id="work">
+          <div className="flex min-h-0 flex-col gap-y-3">
+            <AnimatedDiv animationType="SlideInFromLeft" delay={1} slideEntrancePoint={-20}>
+              <h2 className="text-xl font-bold">Work Experience</h2>
+            </AnimatedDiv>
+            {DATA.work.map((work, id) => (
+              <AnimatedDiv
+                key={work.company}
+                animationType="SlideInFromLeft"
+                slideEntrancePoint={-50}
+                delay={1 + 0.2 * id}
+              >
+                <CommonCard
+                  key={work.company}
+                  logoUrl={work.logoUrl}
+                  altText={work.company}
+                  title={work.company}
+                  subtitle={work.title}
+                  href={work.href}
+                  badges={work.badges}
+                  period={`${work.start} - ${work.end ?? "Present"}`}
+                  description={work.description}
+                />
+              </AnimatedDiv>
+            ))}
+          </div>
+        </section>
+
+        <section id="education">
+          <div className="flex min-h-0 flex-col gap-y-3">
+            <AnimatedDiv delay={1.5} animationType="SlideInFromLeft">
+              <h2 className="text-xl font-bold">Education</h2>
+            </AnimatedDiv>
+            {DATA.education.map((education, id) => (
+              <AnimatedDiv
+                animationType="SlideInFromLeft"
+                slideEntrancePoint={-50}
+                key={education.school}
+                delay={1.5 + id * 0.05}
+              >
+                <CommonCard
+                  key={education.school}
+                  href={education.href}
+                  logoUrl={education.logoUrl}
+                  altText={education.school}
+                  title={education.school}
+                  subtitle={education.degree}
+                  period={`${education.start} - ${education.end}`}
+                />
+              </AnimatedDiv>
+            ))}
+          </div>
+        </section>
+
+
+        <section id="skills">
+          <AnimatedDiv className="flex min-h-0 flex-col gap-y-3" delay={2.5} animationType="SlideInFromLeft">
+            <h2 className="text-xl font-bold">Skills</h2>
+            <div
+              className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-8 gap-6 mt-2"
+            >
+              {DATA.skills.map((skill) => (
+                <AnimatedDiv
+                  animationType="Bubble"
+                  key={skill.name}
+                  className="flex flex-col items-center justify-center"
+                >
+                  <Avatar className="h-16 w-16 mb-2">
+                    <AvatarImage src={skill.logoUrl} alt={skill.name} />
+                    <AvatarFallback>{skill.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <span className="text-xs text-center">{skill.name}</span>
+                </AnimatedDiv>
+              ))}
+            </div>
+          </AnimatedDiv>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
