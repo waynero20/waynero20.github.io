@@ -20,9 +20,9 @@ const geistMono = localFont({
 export default function Home() {
   return (
     <div
-      className={`${geistSans.variable} ${geistMono.variable}  min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6`}
+      className={`${geistSans.variable} ${geistMono.variable}  min-h-screen  font-sans max-w-2xl mx-auto py-12 sm:py-24 px-6`}
     >
-      <main className="flex flex-col min-h-[100dvh] space-y-10">
+      <main className="flex flex-col min-h-[100dvh] space-y-10 text-black">
         <section id="hero">
           <div className="mx-auto w-full max-w-2xl space-y-8">
             <div className="gap-2 flex justify-between">
